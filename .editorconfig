@@ -1,0 +1,120 @@
+root = true
+
+[*]
+
+# https://docs.microsoft.com/visualstudio/ide/create-portable-custom-editor-options#supported-settings
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120
+
+[*.{yml,yaml}]
+
+indent_size = 2
+
+[*.cs]
+
+# https://docs.microsoft.com/visualstudio/ide/editorconfig-language-conventions
+
+# "This." and "Me." qualifiers
+dotnet_style_qualification_for_field = false:error
+dotnet_style_qualification_for_property = false:error
+dotnet_style_qualification_for_method = false:error
+dotnet_style_qualification_for_event = false:error
+
+# Language keywords instead of framework type names for type references
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+dotnet_style_predefined_type_for_member_access = true:error
+
+# Modifier preferences
+dotnet_style_require_accessibility_modifiers = always:error
+dotnet_style_readonly_field = true:error
+
+# Parentheses preferences
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:error
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:error
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:error
+
+# Expression-level preferences
+dotnet_style_prefer_auto_properties = true:error
+dotnet_style_prefer_compound_assignment = true:error
+
+# Null-checking preferences
+dotnet_style_coalesce_expression = true:error
+dotnet_style_null_propagation = true:error
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
+
+# Implicit and explicit types
+csharp_style_var_for_built_in_types = true:error
+csharp_style_var_when_type_is_apparent = true:error
+csharp_style_var_elsewhere = true:error
+
+# Expression-bodied members
+csharp_style_expression_bodied_properties = when_on_single_line:error
+csharp_style_expression_bodied_indexers = when_on_single_line:error
+csharp_style_expression_bodied_accessors = when_on_single_line:error
+csharp_style_expression_bodied_lambdas = when_on_single_line:error
+csharp_style_expression_bodied_local_functions = when_on_single_line:error
+csharp_style_expression_bodied_methods = true:error
+csharp_style_expression_bodied_operators = when_on_single_line:error
+
+# Pattern matching
+csharp_style_pattern_matching_over_is_with_cast_check = true:error
+csharp_style_pattern_matching_over_as_with_null_check = true:error
+
+# Inlined variable declarations
+csharp_style_inlined_variable_declaration = true:error
+
+# C# expression-level preferences
+csharp_prefer_simple_default_expression = true:error
+
+# C# null-checking preferences
+csharp_style_throw_expression = true:error
+csharp_style_conditional_delegate_call = true:error
+
+# Code block preferences
+csharp_prefer_braces = when_multiline:error
+
+# Unused value preferences
+csharp_style_unused_value_assignment_preference = discard_variable:error
+
+# Index and range preferences
+csharp_style_prefer_index_operator = true:error
+csharp_style_prefer_range_operator = true:error
+
+# Miscellaneous preferences
+csharp_style_deconstructed_variable_declaration = true:error
+csharp_style_pattern_local_over_anonymous_function = true:error
+csharp_using_directive_placement = outside_namespace:error
+csharp_prefer_static_local_function = true:error
+csharp_prefer_simple_using_statement = true:error
+csharp_style_prefer_switch_expression = true:error
+
+# Namespace
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_style_namespace_declarations = file_scoped:error
+
+# Set error to default severity for analyzer diagnostics with category 'Style'
+dotnet_analyzer_diagnostic.category-Style.severity = error
+
+# Set error to default severity for analyzer diagnostics with category 'CodeQuality'
+dotnet_analyzer_diagnostic.category-CodeQuality.severity = error
+
+# IDE0046: If statement can be simplified
+dotnet_diagnostic.IDE0046.severity = suggestion
+
+# CS1591: Missing XML documentation comments
+dotnet_diagnostic.CS1591.severity = none
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
+
+# CA1014: Mark assemblies with CLSCompliant
+dotnet_diagnostic.CA1014.severity = none
+
+# CA1062: Validate arguments of public methods (we can turn this off since we are enabling Nullable References)
+dotnet_diagnostic.CA1062.severity = none

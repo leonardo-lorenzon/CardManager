@@ -7,6 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4B2F5E0E-C64
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardManager.Api", "src\CardManager.Api\CardManager.Api.csproj", "{BFD20E16-C960-488B-8A7D-D7FD29320685}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardManager.Domain", "src\CardManager.Domain\CardManager.Domain.csproj", "{2B63E797-F1D3-4298-9485-6089CE9CD47B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardManager.Infrastructure", "src\CardManager.Infrastructure\CardManager.Infrastructure.csproj", "{976AC298-11A1-428E-926E-73FD1A03DBBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardManager.Tests", "src\CardManager.Tests\CardManager.Tests.csproj", "{C3B7C634-BBE3-46CF-85A0-6280E19A8985}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +26,23 @@ Global
 		{BFD20E16-C960-488B-8A7D-D7FD29320685}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFD20E16-C960-488B-8A7D-D7FD29320685}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFD20E16-C960-488B-8A7D-D7FD29320685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B63E797-F1D3-4298-9485-6089CE9CD47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B63E797-F1D3-4298-9485-6089CE9CD47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B63E797-F1D3-4298-9485-6089CE9CD47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B63E797-F1D3-4298-9485-6089CE9CD47B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976AC298-11A1-428E-926E-73FD1A03DBBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976AC298-11A1-428E-926E-73FD1A03DBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976AC298-11A1-428E-926E-73FD1A03DBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976AC298-11A1-428E-926E-73FD1A03DBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3B7C634-BBE3-46CF-85A0-6280E19A8985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3B7C634-BBE3-46CF-85A0-6280E19A8985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3B7C634-BBE3-46CF-85A0-6280E19A8985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3B7C634-BBE3-46CF-85A0-6280E19A8985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BFD20E16-C960-488B-8A7D-D7FD29320685} = {4B2F5E0E-C640-4E0F-9AEE-2CFF130692FC}
+		{2B63E797-F1D3-4298-9485-6089CE9CD47B} = {4B2F5E0E-C640-4E0F-9AEE-2CFF130692FC}
+		{976AC298-11A1-428E-926E-73FD1A03DBBE} = {4B2F5E0E-C640-4E0F-9AEE-2CFF130692FC}
+		{C3B7C634-BBE3-46CF-85A0-6280E19A8985} = {4B2F5E0E-C640-4E0F-9AEE-2CFF130692FC}
 	EndGlobalSection
 EndGlobal
