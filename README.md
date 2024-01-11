@@ -1,0 +1,28 @@
+# Card Manager
+
+This application is part of a live coding to present some patterns and refactoring techniques that help make unit tests
+easier to write and maintain as the application evolves.
+
+## Running locally
+
+To run in watch mode:
+```shell
+dotnet watch --project src/CardManager.Api
+```
+
+Run Tests:
+```shell
+dotnet test
+```
+
+## References
+
+1) xUnit Test Patterns: Refactoring Test Code - Gerard Meszaros
+2) Working Effectively with Legacy Code - Michael Feathers
+3) Growing Object-Oriented Software, Guided by Tests - Freeman, Pryce
+4) Refactoring: Improving the Design of Existing Code - Martin Fowler
+5) Clean Architecture: A Craftsman's Guide to Software Structure and Design  - Robert C. Martin
+6) Domain-Driven Design: Tackling Complexity in the Heart of Software - Eric Evans
+7) [Mocks Aren’t Stubs](https://martinfowler.com/articles/mocksArentStubs.html)
+8) [Replacing Throwing Exceptions with Notification in Validations](https://martinfowler.com/articles/replaceThrowWithNotification.html)
+
