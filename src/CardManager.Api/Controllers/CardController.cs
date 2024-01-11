@@ -1,5 +1,6 @@
 using CardManager.Api.Controllers.responses;
 using CardManager.Domain.contracts;
+using CardManager.Domain.exceptions;
 using CardManager.Domain.services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,8 +29,14 @@ public class CardController : ControllerBase
     [Route("{cardType}/{userId}")]
     public ActionResult<CardResponse> CreateCard(string cardType, string userId)
     {
-        var card = _cardService.Create(userId, Enum.Parse<CardType>(cardType));
-
-        return new CardResponse(card);
+        try
+        {
+            var card = _cardService.Create(userId, Enum.Parse<CardType>(cardType));
+            return new CardResponse(card);
+        }
+        catch (CannotPhysicalCardException exception)
+        {
+            return UnprocessableEntity(exception.Message);
+        }
     }
 }

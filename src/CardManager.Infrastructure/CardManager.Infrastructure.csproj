@@ -10,8 +10,4 @@
       <ProjectReference Include="..\CardManager.Domain\CardManager.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="services\" />
-    </ItemGroup>
-
 </Project>

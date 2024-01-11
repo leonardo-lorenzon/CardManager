@@ -20,5 +20,8 @@ public class CardRepository : ICardRepository
         return card;
     }
 
-    public void Create(Card card) => _cards.Add(card);
+    public void Create(Card card)
+    {
+        _cards.Add(card);
+    }
 }

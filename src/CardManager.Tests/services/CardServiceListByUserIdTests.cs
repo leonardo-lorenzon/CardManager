@@ -27,9 +27,10 @@ public class CardServiceListByUserIdTests
             );
 
         var cardRepository = Substitute.For<ICardRepository>();
+        var userRepository = Substitute.For<IUserRepository>();
         cardRepository.ListByUserId(userId).Returns(new List<Card> { card });
 
-        var cardService = new CardService(cardRepository);
+        var cardService = new CardService(cardRepository, userRepository);
 
         // Act
         var result = cardService.ListByUserId(userId);
@@ -47,9 +48,10 @@ public class CardServiceListByUserIdTests
         // Arrange
         var userId = "123";
         var cardRepository = Substitute.For<ICardRepository>();
+        var userRepository = Substitute.For<IUserRepository>();
         cardRepository.ListByUserId(userId).Throws(new CardNotFoundException());
 
-        var cardService = new CardService(cardRepository);
+        var cardService = new CardService(cardRepository, userRepository);
 
         // Act
         var result = cardService.ListByUserId(userId);

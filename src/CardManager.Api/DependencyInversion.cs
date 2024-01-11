@@ -13,7 +13,14 @@ public class DependencyInversion
         _serviceCollection = serviceCollection;
     }
 
-    public void AddServices() => _serviceCollection.AddTransient<ICardService, CardService>();
+    public void AddServices()
+    {
+        _serviceCollection.AddTransient<ICardService, CardService>();
+    }
 
-    public void AddRepositories() => _serviceCollection.AddSingleton<ICardRepository, CardRepository>();
+    public void AddRepositories()
+    {
+        _serviceCollection.AddSingleton<ICardRepository, CardRepository>();
+        _serviceCollection.AddSingleton<IUserRepository, UserRepository>();
+    }
 }
