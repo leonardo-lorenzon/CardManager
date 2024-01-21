@@ -1,9 +1,6 @@
 using CardManager.Domain.contracts;
-using CardManager.Domain.exceptions;
-using CardManager.Domain.repositories;
 using CardManager.Domain.services;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
+using CardManager.Tests.doubles.faker;
 using Xunit;
 
 namespace CardManager.Tests.services;
@@ -26,9 +23,9 @@ public class CardServiceListByUserIdTests
             DateTime.UtcNow
             );
 
-        var cardRepository = Substitute.For<ICardRepository>();
-        var userRepository = Substitute.For<IUserRepository>();
-        cardRepository.ListByUserId(userId).Returns(new List<Card> { card });
+        var cardRepository = new InMemoryCardRepository();
+        cardRepository.Create(card);
+        var userRepository = new InMemoryUserRepository();
 
         var cardService = new CardService(cardRepository, userRepository);
 
@@ -45,9 +42,8 @@ public class CardServiceListByUserIdTests
     {
         // Arrange
         var userId = "123";
-        var cardRepository = Substitute.For<ICardRepository>();
-        var userRepository = Substitute.For<IUserRepository>();
-        cardRepository.ListByUserId(userId).Throws(new CardNotFoundException());
+        var cardRepository = new InMemoryCardRepository();
+        var userRepository = new InMemoryUserRepository();
 
         var cardService = new CardService(cardRepository, userRepository);
 

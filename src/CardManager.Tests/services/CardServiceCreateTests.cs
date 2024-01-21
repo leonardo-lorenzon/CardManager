@@ -1,9 +1,7 @@
 using CardManager.Domain.contracts;
 using CardManager.Domain.exceptions;
-using CardManager.Domain.repositories;
 using CardManager.Domain.services;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
+using CardManager.Tests.doubles.faker;
 using Xunit;
 
 namespace CardManager.Tests.services;
@@ -16,17 +14,20 @@ public class CardServiceCreateTests
         // Arrange
         var user = new User("123", "Astrid", UserStatus.Active);
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
+        var userRepository = new InMemoryUserRepository();
+        userRepository.AddUser(user);
 
-        var cardRepository = Substitute.For<ICardRepository>();
+        var cardRepository = new InMemoryCardRepository();
         var cardService = new CardService(cardRepository, userRepository);
 
         // Act
         cardService.Create(user.UserId, CardType.Physical);
 
         // Assert
-        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Issued));
+        var result = cardRepository.ListByUserId(user.UserId);
+
+        Assert.Equal(1, result.Count);
+        Assert.Equal(CardStatus.Issued, result[0].Status);
     }
 
     [Fact]
@@ -35,17 +36,20 @@ public class CardServiceCreateTests
         // Arrange
         var user = new User("123", "Astrid", UserStatus.Active);
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
+        var userRepository = new InMemoryUserRepository();
+        userRepository.AddUser(user);
 
-        var cardRepository = Substitute.For<ICardRepository>();
+        var cardRepository = new InMemoryCardRepository();
         var cardService = new CardService(cardRepository, userRepository);
 
         // Act
         cardService.Create(user.UserId, CardType.Virtual);
 
         // Assert
-        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Unblocked));
+        var result = cardRepository.ListByUserId(user.UserId);
+
+        Assert.Equal(1, result.Count);
+        Assert.Equal(CardStatus.Unblocked, result[0].Status);
     }
 
     [Fact]
@@ -76,11 +80,11 @@ public class CardServiceCreateTests
             DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0))
         );
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
-
-        var cardRepository = Substitute.For<ICardRepository>();
-        cardRepository.ListByUserId(user.UserId).Returns(new List<Card> { card1, card2 });
+        var userRepository = new InMemoryUserRepository();
+        userRepository.AddUser(user);
+        var cardRepository = new InMemoryCardRepository();
+        cardRepository.Create(card1);
+        cardRepository.Create(card2);
 
         var cardService = new CardService(cardRepository, userRepository);
 
@@ -88,7 +92,10 @@ public class CardServiceCreateTests
         cardService.Create(user.UserId, CardType.Physical);
 
         // Assert
-        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Type == CardType.Physical));
+        var result = cardRepository.ListByUserId(user.UserId);
+
+        Assert.Equal(3, result.Count);
+        Assert.Equal(CardStatus.Issued, result[2].Status);
     }
 
     [Fact]
@@ -97,10 +104,9 @@ public class CardServiceCreateTests
         // Arrange
         var user = new User("123", "Astrid", UserStatus.Blocked);
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
+        var userRepository = new InMemoryUserRepository();
 
-        var cardRepository = Substitute.For<ICardRepository>();
+        var cardRepository = new InMemoryCardRepository();
         var cardService = new CardService(cardRepository, userRepository);
 
         // Act
@@ -115,10 +121,8 @@ public class CardServiceCreateTests
         // Arrange
         var userId = "123";
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(userId).Throws(new UserNotFoundException());
-
-        var cardRepository = Substitute.For<ICardRepository>();
+        var userRepository = new InMemoryUserRepository();
+        var cardRepository = new InMemoryCardRepository();
         var cardService = new CardService(cardRepository, userRepository);
 
         // Act
@@ -144,11 +148,11 @@ public class CardServiceCreateTests
             DateTime.UtcNow.AddYears(1)
         );
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
+        var userRepository = new InMemoryUserRepository();
+        userRepository.AddUser(user);
 
-        var cardRepository = Substitute.For<ICardRepository>();
-        cardRepository.ListByUserId(user.UserId).Returns(new List<Card> { card });
+        var cardRepository = new InMemoryCardRepository();
+        cardRepository.Create(card);
 
         var cardService = new CardService(cardRepository, userRepository);
 
@@ -174,11 +178,11 @@ public class CardServiceCreateTests
             DateTime.UtcNow
         );
 
-        var userRepository = Substitute.For<IUserRepository>();
-        userRepository.Fetch(user.UserId).Returns(user);
+        var userRepository = new InMemoryUserRepository();
+        userRepository.AddUser(user);
 
-        var cardRepository = Substitute.For<ICardRepository>();
-        cardRepository.ListByUserId(user.UserId).Returns(new List<Card> { card });
+        var cardRepository = new InMemoryCardRepository();
+        cardRepository.Create(card);
 
         var cardService = new CardService(cardRepository, userRepository);
 
@@ -187,7 +191,7 @@ public class CardServiceCreateTests
 
 
         // Assert
-        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Type == CardType.Virtual));
-
+        var result = cardRepository.ListByUserId(user.UserId);
+        Assert.Equal(2, result.Count);
     }
 }
