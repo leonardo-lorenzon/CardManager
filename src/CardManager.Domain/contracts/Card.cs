@@ -3,13 +3,13 @@ namespace CardManager.Domain.contracts;
 public class Card
 {
     public string Id { get; }
-    public string UserId { get; set; }
-    public CardStatus Status { get; set; }
-    public CardType Type { get; set; }
+    public string UserId { get; protected set; }
+    public CardStatus Status { get; protected set; }
+    public CardType Type { get; protected set; }
     public string Number { get; }
     public int Cvv { get; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public DateTime CreatedAt { get; protected set; }
+    public DateTime ExpiresAt { get; protected set; }
 
     public Card(
         string id,

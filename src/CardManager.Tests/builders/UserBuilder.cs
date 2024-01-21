@@ -4,7 +4,7 @@ namespace CardManager.Tests.builders;
 
 public class UserBuilder
 {
-    private readonly User _user;
+    private readonly UserTestSubclass _user;
 
     public UserBuilder()
     {
@@ -18,20 +18,20 @@ public class UserBuilder
 
     public UserBuilder Active()
     {
-        _user.Status = UserStatus.Active;
+        _user.UpdateStatus(UserStatus.Active);
 
         return this;
     }
 
     public UserBuilder Blocked()
     {
-        _user.Status = UserStatus.Blocked;
+        _user.UpdateStatus(UserStatus.Blocked);
 
         return this;
     }
 
-    private static User BuildDefault()
+    private static UserTestSubclass BuildDefault()
     {
-        return new User("7610", "Astrid", UserStatus.Active);
+        return new UserTestSubclass("7610", "Astrid", UserStatus.Active);
     }
 }

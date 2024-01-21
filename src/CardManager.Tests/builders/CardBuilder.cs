@@ -4,7 +4,7 @@ namespace CardManager.Tests.builders;
 
 public class CardBuilder
 {
-    private readonly Card _card;
+    private readonly CardTestSubclass _card;
 
     public CardBuilder()
     {
@@ -18,36 +18,36 @@ public class CardBuilder
 
     public CardBuilder WithUserId(string userId)
     {
-        _card.UserId = userId;
+        _card.UpdateUserId(userId);
 
         return this;
     }
 
     public CardBuilder Physical()
     {
-        _card.Type = CardType.Physical;
+        _card.UpdateType(CardType.Physical);
 
         return this;
     }
 
     public CardBuilder Virtual()
     {
-        _card.Type = CardType.Virtual;
+        _card.UpdateType(CardType.Virtual);
 
         return this;
     }
 
     public CardBuilder Cancelled()
     {
-        _card.Status = CardStatus.Cancelled;
+        _card.UpdateStatus(CardStatus.Cancelled);
 
         return this;
     }
 
     public CardBuilder Expired(DateTime currentDate)
     {
-        _card.CreatedAt = currentDate.Subtract(new TimeSpan(0, 0, 2));
-        _card.ExpiresAt = currentDate.Subtract(new TimeSpan(0, 0, 1));
+        _card.UpdateCreatedAt(currentDate.Subtract(new TimeSpan(0, 0, 2)));
+        _card.UpdateExpiresAt(currentDate.Subtract(new TimeSpan(0, 0, 1)));
 
         return this;
     }
@@ -69,9 +69,9 @@ public class CardBuilder
         return new List<Card> { cancelledCard, expiredCard };
     }
 
-    private static Card BuildDefault()
+    private static CardTestSubclass BuildDefault()
     {
-        return new Card(
+        return new CardTestSubclass(
             "117356",
             "58235",
             CardStatus.Unblocked,
