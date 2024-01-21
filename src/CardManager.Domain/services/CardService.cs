@@ -63,9 +63,7 @@ public class CardService : ICardService
         var cards = _cardRepository.ListByUserId(userId);
 
         var physicalCards = cards.Where(
-            item => item.Type == CardType.Physical &&
-                    item.Status is CardStatus.Issued or CardStatus.Blocked or CardStatus.Unblocked &&
-                    item.ExpiresAt >= _timeService.CurrentDate()
+            item => item.IsPhysical() && item.IsActive(_timeService.CurrentDate())
             ).ToList();
 
         if (physicalCards.Count > 0)

@@ -31,4 +31,14 @@ public class Card
         ExpiresAt = expiresAt;
         CreatedAt = createdAt;
     }
+
+    public bool IsPhysical()
+    {
+        return Type == CardType.Physical;
+    }
+
+    public bool IsActive(DateTime currentDate)
+    {
+        return Status is CardStatus.Issued or CardStatus.Blocked or CardStatus.Unblocked && ExpiresAt >= currentDate;
+    }
 }
