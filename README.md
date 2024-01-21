@@ -3,6 +3,9 @@
 This application is part of a live coding to present some patterns and refactoring techniques that help make unit tests
 easier to write and maintain as the application evolves.
 
+> **Note:** This is a example application designed with the purpose of teaching. Some design decisions have been
+> simplified for the sake of teaching.
+
 ## Running locally
 
 To run in watch mode:
