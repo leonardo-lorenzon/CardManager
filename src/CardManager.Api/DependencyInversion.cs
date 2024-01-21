@@ -16,6 +16,7 @@ public class DependencyInversion
     public void AddServices()
     {
         _serviceCollection.AddTransient<ICardService, CardService>();
+        _serviceCollection.AddTransient<ITimeService, TimeService>();
     }
 
     public void AddRepositories()
