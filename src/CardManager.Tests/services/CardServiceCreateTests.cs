@@ -42,6 +42,57 @@ public class CardServiceCreateTests
     }
 
     [Fact]
+    public void ShouldCreateAPhysicalCardWithThreeYearsExpirationDate()
+    {
+        // Arrange
+        var fakeCurrentDate = DateTime.UtcNow;
+        var user = new User("123", "Astrid", UserStatus.Active);
+
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+        factory.SetCurrentDate(fakeCurrentDate);
+
+        var cardRepository = factory.CardRepository;
+        var cardService = factory.Build();
+
+        // Act
+        cardService.Create(user.UserId, CardType.Physical);
+
+        // Assert
+
+        var result = cardRepository.ListByUserId(user.UserId);
+
+        var expectedExpiredAt = fakeCurrentDate.AddYears(3);
+        Assert.Equal(expectedExpiredAt, result[0].ExpiresAt);
+    }
+
+
+    [Fact]
+    public void ShouldCreateAVirtualCardWithTwoYearsExpirationDate()
+    {
+        // Arrange
+        var fakeCurrentDate = DateTime.UtcNow;
+        var user = new User("123", "Astrid", UserStatus.Active);
+
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+        factory.SetCurrentDate(fakeCurrentDate);
+
+        var cardRepository = factory.CardRepository;
+        var cardService = factory.Build();
+
+        // Act
+        cardService.Create(user.UserId, CardType.Virtual);
+
+        // Assert
+
+        var result = cardRepository.ListByUserId(user.UserId);
+
+        var expectedExpiredAt = fakeCurrentDate.AddYears(2);
+        Assert.Equal(expectedExpiredAt, result[0].ExpiresAt);
+    }
+
+    [Fact]
     public void ShouldBeAbleToCreatePhysicalCardIfThereIsNoActivePhysicalCard()
     {
         // Arrange

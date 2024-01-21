@@ -13,11 +13,13 @@ public class CardService : ICardService
 
     private readonly ICardRepository _cardRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ITimeService _timeService;
 
-    public CardService(ICardRepository cardRepository, IUserRepository userRepository)
+    public CardService(ICardRepository cardRepository, IUserRepository userRepository, ITimeService timeService)
     {
         _cardRepository = cardRepository;
         _userRepository = userRepository;
+        _timeService = timeService;
     }
 
     public IList<Card> ListByUserId(string userId)
@@ -63,7 +65,7 @@ public class CardService : ICardService
         var physicalCards = cards.Where(
             item => item.Type == CardType.Physical &&
                     item.Status is CardStatus.Issued or CardStatus.Blocked or CardStatus.Unblocked &&
-                    item.ExpiresAt >= DateTime.UtcNow
+                    item.ExpiresAt >= _timeService.CurrentDate()
             ).ToList();
 
         if (physicalCards.Count > 0)
@@ -78,7 +80,7 @@ public class CardService : ICardService
             CardType.Physical,
             GenerateCardNumber(),
             GenerateCvv(),
-            DateTime.UtcNow,
+            _timeService.CurrentDate(),
             CreateExpiredDate(CardType.Physical)
         );
 
@@ -96,7 +98,7 @@ public class CardService : ICardService
             CardType.Virtual,
             GenerateCardNumber(),
             GenerateCvv(),
-            DateTime.UtcNow,
+            _timeService.CurrentDate(),
             CreateExpiredDate(CardType.Virtual)
         );
 
@@ -105,14 +107,14 @@ public class CardService : ICardService
         return card;
     }
 
-    private static DateTime CreateExpiredDate(CardType cardType)
+    private DateTime CreateExpiredDate(CardType cardType)
     {
         if (cardType == CardType.Physical)
         {
-            return DateTime.UtcNow.AddYears(PhysicalCardExpirationYears);
+            return _timeService.CurrentDate().AddYears(PhysicalCardExpirationYears);
         }
 
-        return DateTime.UtcNow.AddYears(VirtualCardExpirationYears);
+        return _timeService.CurrentDate().AddYears(VirtualCardExpirationYears);
     }
 
     private static string GenerateCardId()
