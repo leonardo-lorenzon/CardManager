@@ -2,6 +2,7 @@ using CardManager.Domain.contracts;
 using CardManager.Domain.exceptions;
 using CardManager.Domain.services;
 using CardManager.Tests.doubles.faker;
+using CardManager.Tests.factories;
 using Xunit;
 
 namespace CardManager.Tests.services;
@@ -12,13 +13,7 @@ public class CardServiceCreateTests
     public void ShouldCreatePhysicalCardWithStatusIssued()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Active);
-
-        var userRepository = new InMemoryUserRepository();
-        userRepository.AddUser(user);
-
-        var cardRepository = new InMemoryCardRepository();
-        var cardService = new CardService(cardRepository, userRepository);
+        var (cardService, cardRepository, user) = SetupSutWithActiveUser();
 
         // Act
         cardService.Create(user.UserId, CardType.Physical);
@@ -34,13 +29,7 @@ public class CardServiceCreateTests
     public void ShouldCreateVirtualCardWithStatusUnblocked()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Active);
-
-        var userRepository = new InMemoryUserRepository();
-        userRepository.AddUser(user);
-
-        var cardRepository = new InMemoryCardRepository();
-        var cardService = new CardService(cardRepository, userRepository);
+        var (cardService, cardRepository, user) = SetupSutWithActiveUser();
 
         // Act
         cardService.Create(user.UserId, CardType.Virtual);
@@ -80,13 +69,12 @@ public class CardServiceCreateTests
             DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0))
         );
 
-        var userRepository = new InMemoryUserRepository();
-        userRepository.AddUser(user);
-        var cardRepository = new InMemoryCardRepository();
-        cardRepository.Create(card1);
-        cardRepository.Create(card2);
+        var factory = new CardServiceTestFactory();
+        factory.AddCards(new List<Card> { card1, card2 });
+        factory.SetUser(user);
 
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardRepository = factory.CardRepository;
+        var cardService = factory.Build();
 
         // Act
         cardService.Create(user.UserId, CardType.Physical);
@@ -102,12 +90,7 @@ public class CardServiceCreateTests
     public void ShouldThrowExceptionWhenUserIsBlocked()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Blocked);
-
-        var userRepository = new InMemoryUserRepository();
-
-        var cardRepository = new InMemoryCardRepository();
-        var cardService = new CardService(cardRepository, userRepository);
+        var (cardService, user) = SetupSutWithBlockedUser();
 
         // Act
 
@@ -121,9 +104,7 @@ public class CardServiceCreateTests
         // Arrange
         var userId = "123";
 
-        var userRepository = new InMemoryUserRepository();
-        var cardRepository = new InMemoryCardRepository();
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = new CardServiceTestFactory().Build();
 
         // Act
 
@@ -148,13 +129,11 @@ public class CardServiceCreateTests
             DateTime.UtcNow.AddYears(1)
         );
 
-        var userRepository = new InMemoryUserRepository();
-        userRepository.AddUser(user);
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+        factory.AddCards(new List<Card> { card });
 
-        var cardRepository = new InMemoryCardRepository();
-        cardRepository.Create(card);
-
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = factory.Build();
 
         // Act
         // Assert
@@ -178,13 +157,12 @@ public class CardServiceCreateTests
             DateTime.UtcNow
         );
 
-        var userRepository = new InMemoryUserRepository();
-        userRepository.AddUser(user);
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+        factory.AddCards(new List<Card> { card });
 
-        var cardRepository = new InMemoryCardRepository();
-        cardRepository.Create(card);
-
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardRepository = factory.CardRepository;
+        var cardService = factory.Build();
 
         // Act
         cardService.Create(user.UserId, CardType.Virtual);
@@ -193,5 +171,29 @@ public class CardServiceCreateTests
         // Assert
         var result = cardRepository.ListByUserId(user.UserId);
         Assert.Equal(2, result.Count);
+    }
+
+    private static (CardService cardService, InMemoryCardRepository cardRepository, User user) SetupSutWithActiveUser()
+    {
+        var user = new User("123", "Astrid", UserStatus.Active);
+
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+
+        var cardRepository = factory.CardRepository;
+        var cardService = factory.Build();
+
+        return (cardService, cardRepository, user);
+    }
+
+    private static (CardService cardService, User user) SetupSutWithBlockedUser()
+    {
+        var user = new User("123", "Astrid", UserStatus.Blocked);
+
+        var factory = new CardServiceTestFactory();
+        factory.SetUser(user);
+        var cardService = factory.Build();
+
+        return (cardService, user);
     }
 }

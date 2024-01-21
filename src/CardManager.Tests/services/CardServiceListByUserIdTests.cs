@@ -1,6 +1,5 @@
 using CardManager.Domain.contracts;
-using CardManager.Domain.services;
-using CardManager.Tests.doubles.faker;
+using CardManager.Tests.factories;
 using Xunit;
 
 namespace CardManager.Tests.services;
@@ -23,11 +22,10 @@ public class CardServiceListByUserIdTests
             DateTime.UtcNow
             );
 
-        var cardRepository = new InMemoryCardRepository();
-        cardRepository.Create(card);
-        var userRepository = new InMemoryUserRepository();
+        var factory = new CardServiceTestFactory();
+        factory.AddCards(new List<Card> { card });
 
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = factory.Build();
 
         // Act
         var result = cardService.ListByUserId(userId);
@@ -42,10 +40,9 @@ public class CardServiceListByUserIdTests
     {
         // Arrange
         var userId = "123";
-        var cardRepository = new InMemoryCardRepository();
-        var userRepository = new InMemoryUserRepository();
+        var factory = new CardServiceTestFactory();
 
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = factory.Build();
 
         // Act
         var result = cardService.ListByUserId(userId);
