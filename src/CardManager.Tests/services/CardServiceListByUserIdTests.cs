@@ -1,4 +1,5 @@
 using CardManager.Domain.contracts;
+using CardManager.Tests.builders;
 using CardManager.Tests.factories;
 using Xunit;
 
@@ -11,16 +12,7 @@ public class CardServiceListByUserIdTests
     {
         // Arrange
         var userId = "123";
-        var card = new Card(
-            "111",
-            userId,
-            CardStatus.Issued,
-            CardType.Physical,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow
-            );
+        var card = new CardBuilder().WithUserId(userId).Build();
 
         var factory = new CardServiceTestFactory();
         factory.AddCards(new List<Card> { card });

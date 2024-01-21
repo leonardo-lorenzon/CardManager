@@ -32,6 +32,6 @@ public class UserBuilder
 
     private static User BuildDefault()
     {
-        return new User("7610", "Astrid", UserStatus.Blocked);
+        return new User("7610", "Astrid", UserStatus.Active);
     }
 }

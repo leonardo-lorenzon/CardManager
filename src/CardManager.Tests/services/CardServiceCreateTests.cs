@@ -1,6 +1,7 @@
 using CardManager.Domain.contracts;
 using CardManager.Domain.exceptions;
 using CardManager.Domain.services;
+using CardManager.Tests.builders;
 using CardManager.Tests.doubles.faker;
 using CardManager.Tests.factories;
 using Xunit;
@@ -46,7 +47,7 @@ public class CardServiceCreateTests
     {
         // Arrange
         var fakeCurrentDate = DateTime.UtcNow;
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
@@ -72,7 +73,7 @@ public class CardServiceCreateTests
     {
         // Arrange
         var fakeCurrentDate = DateTime.UtcNow;
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
@@ -96,33 +97,15 @@ public class CardServiceCreateTests
     public void ShouldBeAbleToCreatePhysicalCardIfThereIsNoActivePhysicalCard()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
+        var fakerCurrentDate = DateTime.UtcNow;
 
-        var card1 = new Card(
-            "111",
-            user.UserId,
-            CardStatus.Cancelled,
-            CardType.Physical,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow
-        );
-
-        var card2 = new Card(
-            "222",
-            user.UserId,
-            CardStatus.Unblocked,
-            CardType.Physical,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0))
-        );
+        var nonActivePhysicalCards = CardBuilder.BuildNonActivePhysicalCards(user.UserId, fakerCurrentDate);
 
         var factory = new CardServiceTestFactory();
-        factory.AddCards(new List<Card> { card1, card2 });
+        factory.AddCards(nonActivePhysicalCards);
         factory.SetUser(user);
+        factory.SetCurrentDate(fakerCurrentDate);
 
         var cardRepository = factory.CardRepository;
         var cardService = factory.Build();
@@ -167,18 +150,12 @@ public class CardServiceCreateTests
     public void ShouldThrowExceptionWhenTryToCreateMoreThanOneActivePhysicalCard()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
 
-        var card = new Card(
-            "111",
-            user.UserId,
-            CardStatus.Issued,
-            CardType.Physical,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow.AddYears(1)
-        );
+        var card = new CardBuilder()
+            .WithUserId(user.UserId)
+            .Physical()
+            .Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
@@ -195,18 +172,12 @@ public class CardServiceCreateTests
     public void ShouldBeAbleToCreateMoreThanOneVirtualCard()
     {
         // Arrange
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
 
-        var card = new Card(
-            "111",
-            user.UserId,
-            CardStatus.Issued,
-            CardType.Virtual,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow
-        );
+        var card = new CardBuilder()
+            .WithUserId(user.UserId)
+            .Virtual()
+            .Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
@@ -222,11 +193,12 @@ public class CardServiceCreateTests
         // Assert
         var result = cardRepository.ListByUserId(user.UserId);
         Assert.Equal(2, result.Count);
+        Assert.Equal(CardStatus.Unblocked, result[0].Status);
     }
 
     private static (CardService cardService, InMemoryCardRepository cardRepository, User user) SetupSutWithActiveUser()
     {
-        var user = new User("123", "Astrid", UserStatus.Active);
+        var user = new UserBuilder().Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
@@ -239,7 +211,9 @@ public class CardServiceCreateTests
 
     private static (CardService cardService, User user) SetupSutWithBlockedUser()
     {
-        var user = new User("123", "Astrid", UserStatus.Blocked);
+        var user = new UserBuilder()
+            .Blocked()
+            .Build();
 
         var factory = new CardServiceTestFactory();
         factory.SetUser(user);
