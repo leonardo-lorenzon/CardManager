@@ -36,10 +36,8 @@ public class CardServiceListByUserIdTests
         var result = cardService.ListByUserId(userId);
 
         // Assert
-        if (result.Count == 1)
-        {
-            Assert.Equal(card, result[0]);
-        }
+        Assert.Equal(1, result.Count);
+        Assert.Equal(card, result[0]);
     }
 
     [Fact]

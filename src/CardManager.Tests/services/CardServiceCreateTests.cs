@@ -10,10 +10,8 @@ namespace CardManager.Tests.services;
 
 public class CardServiceCreateTests
 {
-    [Theory]
-    [InlineData(CardType.Physical)]
-    [InlineData(CardType.Virtual)]
-    public void ShouldCreateCard(CardType cardType)
+    [Fact]
+    public void ShouldCreatePhysicalCardWithStatusIssued()
     {
         // Arrange
         var user = new User("123", "Astrid", UserStatus.Active);
@@ -25,17 +23,29 @@ public class CardServiceCreateTests
         var cardService = new CardService(cardRepository, userRepository);
 
         // Act
-        cardService.Create(user.UserId, cardType);
+        cardService.Create(user.UserId, CardType.Physical);
 
         // Assert
-        if (cardType is CardType.Physical)
-        {
-            cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Issued));
-        }
-        else
-        {
-            cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Unblocked));
-        }
+        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Issued));
+    }
+
+    [Fact]
+    public void ShouldCreateVirtualCardWithStatusUnblocked()
+    {
+        // Arrange
+        var user = new User("123", "Astrid", UserStatus.Active);
+
+        var userRepository = Substitute.For<IUserRepository>();
+        userRepository.Fetch(user.UserId).Returns(user);
+
+        var cardRepository = Substitute.For<ICardRepository>();
+        var cardService = new CardService(cardRepository, userRepository);
+
+        // Act
+        cardService.Create(user.UserId, CardType.Virtual);
+
+        // Assert
+        cardRepository.Received(1).Create(Arg.Is<Card>(item => item.Status == CardStatus.Unblocked));
     }
 
     [Fact]
