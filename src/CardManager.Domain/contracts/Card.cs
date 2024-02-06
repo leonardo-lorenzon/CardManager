@@ -3,13 +3,13 @@ namespace CardManager.Domain.contracts;
 public class Card
 {
     public string Id { get; }
-    public string UserId { get; }
-    public CardStatus Status { get; }
-    public CardType Type { get; }
+    public string UserId { get; protected set; }
+    public CardStatus Status { get; protected set; }
+    public CardType Type { get; protected set; }
     public string Number { get; }
     public int Cvv { get; }
-    public DateTime CreatedAt { get; }
-    public DateTime ExpiresAt { get; }
+    public DateTime CreatedAt { get; protected set; }
+    public DateTime ExpiresAt { get; protected set; }
 
     public Card(
         string id,
@@ -30,5 +30,15 @@ public class Card
         Cvv = cvv;
         ExpiresAt = expiresAt;
         CreatedAt = createdAt;
+    }
+
+    public bool IsPhysical()
+    {
+        return Type == CardType.Physical;
+    }
+
+    public bool IsActive(DateTime currentDate)
+    {
+        return Status is CardStatus.Issued or CardStatus.Blocked or CardStatus.Unblocked && ExpiresAt >= currentDate;
     }
 }

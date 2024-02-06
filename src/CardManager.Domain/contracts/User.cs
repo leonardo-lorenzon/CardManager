@@ -6,7 +6,7 @@ public class User
 
     public string Name { get; }
 
-    public UserStatus Status { get; }
+    public UserStatus Status { get; protected set; }
 
     public User(string userId, string name, UserStatus status)
     {

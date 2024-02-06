@@ -1,9 +1,6 @@
 using CardManager.Domain.contracts;
-using CardManager.Domain.exceptions;
-using CardManager.Domain.repositories;
-using CardManager.Domain.services;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
+using CardManager.Tests.builders;
+using CardManager.Tests.factories;
 using Xunit;
 
 namespace CardManager.Tests.services;
@@ -15,31 +12,19 @@ public class CardServiceListByUserIdTests
     {
         // Arrange
         var userId = "123";
-        var card = new Card(
-            "111",
-            userId,
-            CardStatus.Issued,
-            CardType.Physical,
-            "5555111122223333",
-            123,
-            DateTime.UtcNow,
-            DateTime.UtcNow
-            );
+        var card = new CardBuilder().WithUserId(userId).Build();
 
-        var cardRepository = Substitute.For<ICardRepository>();
-        var userRepository = Substitute.For<IUserRepository>();
-        cardRepository.ListByUserId(userId).Returns(new List<Card> { card });
+        var factory = new CardServiceTestFactory();
+        factory.AddCards(new List<Card> { card });
 
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = factory.Build();
 
         // Act
         var result = cardService.ListByUserId(userId);
 
         // Assert
-        if (result.Count == 1)
-        {
-            Assert.Equal(card, result[0]);
-        }
+        Assert.Equal(1, result.Count);
+        Assert.Equal(card, result[0]);
     }
 
     [Fact]
@@ -47,11 +32,9 @@ public class CardServiceListByUserIdTests
     {
         // Arrange
         var userId = "123";
-        var cardRepository = Substitute.For<ICardRepository>();
-        var userRepository = Substitute.For<IUserRepository>();
-        cardRepository.ListByUserId(userId).Throws(new CardNotFoundException());
+        var factory = new CardServiceTestFactory();
 
-        var cardService = new CardService(cardRepository, userRepository);
+        var cardService = factory.Build();
 
         // Act
         var result = cardService.ListByUserId(userId);
