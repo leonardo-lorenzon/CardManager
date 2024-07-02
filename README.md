@@ -6,7 +6,7 @@ easier to write and maintain as the application evolves.
 > **Note:** This is a example application designed with the purpose of teaching. Some design decisions have been
 > simplified for the sake of teaching.
 
-The main work is presented in this [MR](https://github.com/leonardo-lorenzon/CardManager/pull/1). 
+The main work is presented in this [PR](https://github.com/leonardo-lorenzon/CardManager/pull/1). 
 Each commit is a single pattern or refactoring technique. Take a look on each one comparing side-by-side with the previous code.
 
 ## Running locally
