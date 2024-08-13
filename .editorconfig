@@ -105,7 +105,10 @@ dotnet_analyzer_diagnostic.category-Style.severity = error
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = error
 
 # IDE0046: If statement can be simplified
-dotnet_diagnostic.IDE0046.severity = suggestion
+dotnet_diagnostic.IDE0046.severity = none
+
+# IDE0270: Null check can be simplified
+dotnet_diagnostic.IDE0270.severity = none
 
 # CS1591: Missing XML documentation comments
 dotnet_diagnostic.CS1591.severity = none
